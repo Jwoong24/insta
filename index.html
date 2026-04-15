@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin:0;
+  font-family: 'Noto Sans KR', sans-serif;
+  background:#f5f5f7;
+  touch-action: manipulation;
+}
+
+/* 상단 */
+header {
+  display:flex;
+  padding:14px;
+  background:#fff;
+  border-bottom:1px solid #eee;
+  font-weight:bold;
+}
+
+.header-icons {
+  margin-left:auto;
+  cursor:pointer;
+}
+
+/* 검색 */
+#searchBox {
+  position: fixed;
+  top: 60px;
+  left: 12px;
+  right: 12px;
+  background: white;
+  padding: 10px;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 1000;
+}
+
+#searchInput {
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:20px;
+  background:#f2f2f2;
+  box-sizing:border-box; 
+}
+
+/* 필터 */
+.toggle-buttons {
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  padding:10px;
+}
+
+.toggle-buttons button {
+  border:none;
+  padding:8px 14px;
+  border-radius:20px;
+  background:#fff;
+}
+
+.toggle-buttons .active {
+  background:#e1306c;
+  color:#fff;
+}
+
+/* 그리드 */
+.category-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:20px;
+  padding:20px;
+}
+
+.category-item {
+  text-align:center;
+  cursor:pointer;
+}
+
+.circle-button {
+  width:72px;
+  height:72px;
+  border-radius:50%;
+  background-size:cover;
+  margin:auto;
+  box-shadow:0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* 상세 */
+#detailView {
+  position:fixed;
+  inset:0;
+  display:none;
+  color:white;
+}
+
+/* 뒤로가기 */
+.detail-header {
+  padding:16px;
+}
+
+.back-btn {
+  width:36px;
+  height:36px;
+  border-radius:50%;
+ background:rgba(255,255,255,0.3);
+  backdrop-filter: blur(10px);
+  color:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.2);
+  cursor:pointer;
+}
+
+.back-btn:active {
+  transform: scale(0.9);
+}
+
+/* 중앙 */
+.artist-hero {
+  text-align:center;
+  margin-top:20px;
+}
+
+.artist-img {
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  margin:auto;
+  background-size:cover;
+}
+
+.artist-name {
+  margin-top:14px;
+  font-size:28px;
+  font-weight:bold;
+}
+
+/* 플레이리스트 */
+.playlist {
+  margin-top:20px;
+  background:white;
+  border-radius:30px;
+  padding:20px;
+  color:black;
+
+  width:75%;                
+  margin:20px auto 0 auto;  
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.15);
+  max-height:60vh;
+  overflow:auto;
+}
+
+.song-item {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  border-radius:12px;
+  margin-bottom:8px;
+  background:#f7f7f7;
+  cursor:pointer;
+}
+
+.song-thumb {
+  width:50px;
+  height:50px;
+  border-radius:10px;
+  background-size:cover;
+  background-position:center;
+}
+
+.song-text {
+  flex:1;
+}
+
+.song-title {
+  font-weight:600;
+}
+
+.song-sub {
+  font-size:12px;
+  color:#888;
+  margin-top:2px;
+}
+
+.category-item {
+  text-align:center;
+  cursor:pointer;
+  outline:none; /*  클릭 테두리 제거 */
+}
+</style>
+</head>
+
+<body>
+
+<header id="header">
+  <div>아티스트</div>
+  <div class="header-icons" id="searchBtn">🔍</div>
+</header>
+
+<div id="searchBox">
+  <input id="searchInput" placeholder="검색..." />
+</div>
+
+<div class="toggle-buttons" id="filters">
+  <button class="active" data-group="all">전체 보기</button>
+  <button data-group="domestic">국내 아티스트</button>
+  <button data-group="international">해외 아티스트</button>
+</div>
+
+<div class="category-grid" id="grid"></div>
+
+<!-- 상세 -->
+<div id="detailView">
+  <div class="detail-header">
+    <div class="back-btn" id="backBtn">◀</div>
+  </div>
+
+  <div class="artist-hero" id="artistHero"></div>
+
+  <div class="playlist" id="playlist"></div>
+</div>
+
+<script>
+const artists = [
+{
+  name:"아이유",
+  group:"domestic",
+  img:"https://i.imgur.com/BoN9kdC.png",
+  bgColor:"#1a2a6c",
+  songs:[
+    {title:"밤편지", 
+    subtitle:"세계 꽃 박람회", 
+    url:"https://www.instagram.com/reel/ABC123/"
+    },
+
+    {title:"Blueming", 
+    subtitle:"세계 꽃 박람회", 
+    url:"https://www.instagram.com/reel/DEF456/"}
+  ]
+},
+{
+  name:"NewJeans",
+  group:"international",
+  img:"https://i.imgur.com/BoN9kdC.png",
+  bgColor:"#0f2027",
+  songs:[
+    {title:"Hype Boy", 
+     subtitle:"세계 꽃 박람회", 
+     url:"https://www.instagram.com/reel/GHI789/"},
+    {title:"Attention", url:"https://www.instagram.com/reel/JKL111/"}
+  ]
+},
+{
+  name:"BTS",
+  group:"international",
+  img:"https://i.imgur.com/BoN9kdC.png",
+  bgColor:"#0f2027",
+  songs:[
+    {title:"불타오르네", 
+     subtitle:"세계 꽃 박람회", 
+     url:"https://www.instagram.com/reel/GHI789/"},
+    {title:"쩔어", url:"https://www.instagram.com/reel/JKL111/"}
+  ]
+}
+
+
+];
+
+let currentGroup="all";
+let keyword="";
+
+const grid=document.getElementById("grid");
+const detail=document.getElementById("detailView");
+
+/* 렌더 */
+function render(){
+  grid.innerHTML="";
+  artists
+  .filter(a => 
+    (currentGroup==="all"||a.group===currentGroup) &&
+    a.name.toLowerCase().includes(keyword.toLowerCase())
+  )
+
+  .sort((a, b) => a.name.localeCompare(b.name, 'ko'))
+
+  .forEach(artist=>{
+    const div=document.createElement("div");
+    div.className="category-item";
+    div.innerHTML=`
+      <div class="circle-button" style="background-image:url('${artist.img}')"></div>
+      <div>${artist.name}</div>
+    `;
+    div.onclick=()=>openArtist(artist);
+    grid.appendChild(div);
+  });
+}
+
+/* 검색 */
+searchBtn.onclick=()=>{
+  searchBox.style.display = searchBox.style.display==="block"?"none":"block";
+};
+
+searchInput.oninput=(e)=>{
+  keyword=e.target.value;
+  render();
+};
+
+/* 상세 열기 */
+function openArtist(artist){
+  header.style.display="none";
+  filters.style.display="none";
+  searchBox.style.display="none";
+
+  detail.style.display="block";
+if(artist.name === "아이유"){
+  detail.style.background = `linear-gradient(0deg, #F4C9C3, #AFDBE1)`
+}
+if(artist.name === "NewJeans"){
+  detail.style.background = `linear-gradient(0deg, #AFDBE1, #F4C9C3)`
+}
+else {
+  /*기본값 (모든 나머지) */
+  detail.style.background = `linear-gradient(160deg, #F4C9C3, #AFDBE1)`
+}
+
+
+  artistHero.innerHTML=`
+    <div class="artist-img" style="background-image:url('${artist.img}')"></div>
+    <div class="artist-name">${artist.name}</div>
+  `;
+
+  playlist.innerHTML="";
+artist.songs.forEach(s=>{
+  const item=document.createElement("div");
+  item.className="song-item";
+
+  item.innerHTML=`
+    <div class="song-thumb" style="background-image:url('${s.thumb || artist.img}')"></div>
+    <div class="song-text">
+      <div class="song-title">${s.title}</div>
+      <div class="song-sub">${s.subtitle || ""}</div>
+    </div>
+  `;
+
+  item.onclick=()=>window.open(s.url,"_blank");
+
+  playlist.appendChild(item);
+});
+
+} 
+
+/* 뒤로가기 */
+backBtn.onclick=()=>{
+  detail.style.display="none";
+  header.style.display="flex";
+  filters.style.display="flex";
+};
+
+/* 스와이프 */
+let startX=0;
+detail.addEventListener("touchstart",e=>{
+  startX=e.touches[0].clientX;
+});
+detail.addEventListener("touchend",e=>{
+  if(e.changedTouches[0].clientX - startX > 80){
+    backBtn.click();
+  }
+});
+
+/* 필터 */
+document.querySelectorAll(".toggle-buttons button").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".toggle-buttons button")
+      .forEach(b=>b.classList.remove("active"));
+    btn.classList.add("active");
+    currentGroup=btn.dataset.group;
+    render();
+  };
+});
+
+/* 더블탭 방지 */
+document.addEventListener('dblclick', e => e.preventDefault());
+
+render();
+</script>
+
+</body>
+</html>
