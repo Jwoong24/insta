@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
 
@@ -69,17 +69,15 @@ header {
   padding:8px 14px;
   border-radius:20px;
   background:#fff;
-}
-
-.toggle-buttons .active {
-  background:#e1306c;
-  color:#fff;
+  cursor:pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
 /* 그리드 */
 .category-grid {
   display:grid;
-  grid-template-columns:repeat(4,1fr);
+  grid-template-columns:repeat(auto-fill, minmax(80px, 1fr));
   gap:20px;
   padding:20px;
 }
@@ -204,6 +202,121 @@ header {
   cursor:pointer;
   outline:none; /*  클릭 테두리 제거 */
 }
+
+/* 버튼별 활성 색상 */
+.toggle-buttons button[data-group="all"].active {
+  background:#E1306C;
+  color:#fff;
+}
+
+.toggle-buttons button[data-group="domestic"].active {
+  background:#3A86FF;
+  color:#fff;
+}
+
+.toggle-buttons button[data-group="international"].active {
+  background:#06D6A0;
+  color:#fff;
+}
+
+.toggle-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.12);
+}
+
+.toggle-buttons button {
+  border:none;
+  padding:8px 14px;
+  border-radius:20px;
+  background:#fff;
+  cursor:pointer;
+  transition:0.2s ease;
+}
+
+/* =========================
+   PC 대응 (768px 이상)
+========================= */
+@media (min-width: 768px) {
+
+  /* 전체 최대 폭 제한 */
+  body {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* 헤더 */
+  header {
+    padding: 20px 30px;
+    font-size: 18px;
+  }
+
+  /* 검색창 위치 */
+  #searchBox {
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 600px;
+  }
+
+  /* 필터 */
+  .toggle-buttons {
+    padding: 20px;
+  }
+
+  /* 🔥 그리드 핵심 */
+  .category-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 30px;
+    padding: 30px;
+  }
+
+  /* 아이콘 크게 */
+  .circle-button {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* 아티스트 이름 */
+  .category-item div:last-child {
+    margin-top: 10px;
+    font-size: 16px;
+  }
+
+  /* 상세 화면 */
+  .artist-img {
+    width: 220px;
+    height: 220px;
+  }
+
+  .artist-name {
+    font-size: 34px;
+  }
+
+  /* 플레이리스트 */
+  .playlist {
+    width: 600px;
+    max-height: 65vh;
+  }
+
+  /* 곡 아이템 */
+  .song-item {
+    padding: 16px;
+  }
+
+  .song-thumb {
+    width: 60px;
+    height: 60px;
+  }
+
+  .song-title {
+    font-size: 16px;
+  }
+
+  .song-sub {
+    font-size: 13px;
+  }
+}
+
+
 </style>
 </head>
 
@@ -239,22 +352,44 @@ header {
 
 <script>
 const artists = [
+
 {
-  name:"아이유",
+  name:"QWER",
   group:"domestic",
-  img:"https://i.imgur.com/BoN9kdC.png",
+  img:"https://lh3.googleusercontent.com/rd-d/ALs6j_FPMZybCkJ9bum3AwTkIxUzKe4dSyLVKkzYWjnkHHjmL9G-p0ccV7kViN2vjww6E_y4mmag7biU6u9o6ly6_hM0CprinJLb_TIYbXIfAQJ2Spx6AzPggQe_UQ38xNXa3qKS0ZZNUtc4eLIBK_914jL0vVa5crwXNOs7dviPeDmhGQkNGEIXFCaF7lTK3fsiP8-pHcRJuKnCOE02H5WaN_RI-X1tJjUqgQfJpcNjRK03YsBywPSLbG24Bnd4IYV1Qs6PIPmDKK6suVKnp9cG1RRFrZT1VV4bHhagOhQkwz7Xk-RLZ5d32AaPpx-2-x44tp2bkOH6wWCWGBDpF9ltbZk50_vb0CjpsABhYUThjDRcsA0aS8K4smV2pBDfal7o7w0f3gdxEl_tIO4GeLCLpX86gZbm6kAyN9l3BxrSVQAc9_6dYFHf86hJ2J9vDeWZjaxMIfo6ZYCBxoLlvcZLNfyBunOvm2CTCQnGeWcnIf2PZ9RvKjjf_kk--is4sN7A8C1zjD6mIlZspJTFrcUNOQ-gKnH5gzGMaUvuDSvOV9p06QTfI5Vlrl1HmWM1zqHf7sY2v6NBsrIyu9zuXbRpKvRX2yLlRjXNciMggsZcmNDzJW3avUJy989wtM3PvDekDRIHylsB0Fl0L-mhDXtXR1sCaM9atCvdA9-mNgIo2i1iJgBRgWKCUMu64LVzFD9uExkBYbo_IeWFxMsBlL1kLkFZYIcQYOX6EZlvd6K3wE1zaGXteSYv8D44zfgZp9J7uV5A8tLjWO8PMJ9bVy4wP2q2yGZzUfoTdi7lGKO4t924Xs1LsICCWG2fzRCr_Gvqg8CxDmiE7FvUI9z7Plfg9tFibujHW0_Fm_v-E9eYg4_BVY4tdjPLW161uECAPL0tmMQzouYiihrAy_ZefqbqOoHYQyuGM4Z6Mz7xHPrfffezVilmAB4-ZuqKle8yTqAv00PS6gtxfnqMEv94kxC3AkmnnQtAfr1akkkN4_JFWLpN59ny8mVR5j7baNBx-ciJ4OAFL3puYx5jFZfKbioesqtp0BkwkUF363Jjxrl51QdyrvU3WPav-6T0QD9YdUKe-iGbrIXq3wRcSA=w1920-h919?auditContext=prefetch",
   bgColor:"#1a2a6c",
-  songs:[
-    {title:"밤편지", 
-    subtitle:"세계 꽃 박람회", 
-    url:"https://www.instagram.com/reel/ABC123/"
+ 
+   songs:[
+    {
+    title:"별의 하모니", 
+    subtitle:"[2024 PENTAPORT] 인천 펜타포트 락 페스티벌", 
+    url:"https://www.instagram.com/reel/C-Kt5rKN2rZ/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+    thumb:"https://lh3.googleusercontent.com/rd-d/ALs6j_G9_Z-8v7D2h1DMYB1v6O09NGhbANNK-jnWzihuDXGGeqiqMmMN5pg4iTNhAau1KCc27z8cd6ky0IQOe_H0ftJATViP_FxgsXCACmEpaQv8LLukO4p7S-llPqz_7A4AePhZtllf-QExBuqnrU1aL03PLnyD69SLEo3HKBm9k94SLeT4TYFoeTnwHqazF7_LOW9EbkgdsHAx9_TXjvKUIdGuFlXvoPxzn-RR7tJv6mA_FPdn7ihyVyt3-KFn5xwm_06sw7ADGg_7RBsBk3u6yoIARmNLn3nXcOrl-KUjXDCIGiTv9skD-peOY2H0hHOUPRL69xKwiqeFYaywDoDolOdem7xqhDhwhY8icWBL6W8KeWZHtYygh31Jqr4h0_EDhXWWPkf1Ic_vPTPN6EDCTzCpQJvbIZgJ3NY4lv76L8n-2_wTtkqfc70vwCe0JhDHWE3fK3riPnPnZFDHP9QRvEu4egoGVIFidDkqfmIohZqJCpc5fAgw0khzFUL8SQrgooQU2rrHBa5_pO9dSpyTGMWTChxlsL1RRSiERlodYlPRxBl16VYKnZ7ccIsv2pN2jjEoklii9itmqjY_PVTRr1hxEvbAGO50NkFsKAXblUvozrnK6imqhNG6k-eml8Qok3sOKH15tm6kwEzccp4c57VW2A2ILyluR93l41p1Z74D2eCjJnsQDRFWyEbxQOzECMKI0Fw3EPbNPK54unzi6DhxHjpd-wttNEVZDXrbBlqDRpCVnLQcH4cAH7G1HReImsIhBRBxfMqqUB9R57UuB6d7Y7dN6xAoADLQgbXfR9DIzG5qukwknwt24_NLi0z1_DkOuMUnRXKojNaraW_sUe5qzLagGIanPtF_xnuqLnxrOgenGokNurVGHnL669isDLrU35r_mBBcvItbWXFMFeyGUfpfwwHuyszBkqXDZ8xRtmjUA30sipb3v-sW3-FzB3llAWnlH2Ed8sbE-hIw5-cwDhoPFDXCtsLNxBo1sZGjJGvuUGmi68VQILct5wb46aBQAmlUTxQYEX4wn88BPz7_Hdxh1GpUSj6ZDJo7FCvGIueINOPE-QZ-OtydsXoZ8LAHdw4tangZLQ=w1920-h919?auditContext=prefetch"
     },
 
-    {title:"Blueming", 
-    subtitle:"세계 꽃 박람회", 
-    url:"https://www.instagram.com/reel/DEF456/"}
-  ]
+
+   
+
+    {
+    title:"불꽃놀이", 
+    subtitle:"[2024 PENTAPORT] 인천 펜타포트 락 페스티벌", 
+    url:"https://www.instagram.com/reel/C-KtRJMtuv9/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+    thumb:"https://lh3.googleusercontent.com/rd-d/ALs6j_HSfYxqculRb88YKPawnfsOigCJ4SNDV6_jWhofhPJGsD6ElBI-lDeksBdYYdY0qLqchWd7sPYaMAkLfWVvhoMEhYry3fGmAFmA6JFM9vtcGkSdXe1ZY2YjeH2U2G8kmcKTJqjjJlVuGeat4XYRpV44OhE50ejkGFbxuCSgmSv51O73Lc4jEEJO8T7iXYpClRAKgu9VkzRqi3lp-pyuZSHj5i2mqzJO7KpBzofz8UlRJd61AByr1qCXr8oqoU1Wo8IGyp82y4nSPvRhEMOLNCaOqrgqeMUL9JC7_8_c5FfaQbzFWksn1IgEPqU7TP3SSBtEZz_HDUzjJyNt8efuo4ddG-fpvQEDz14WI44KEF_KsqeExbCvlmcbf-wxKmVaoIrUSfBISMfc1Rt2UlpwmfEfMbJSAQnv6K6eOULtVzCfe3dlQgdybelrGKmXCCEDeyHQdiMj6o-wfstkJ3Hb5n9bMfv6So07d3RsXqjWslVwm9I3DuOa7nqTWoM4GR2qbFYUH_d-mfzFEqgaWykGk14N7aZh07yudLCVi24yU20XX2jrK5q84c69wIsoTRXRCSBBnu6e02khB8GDRDMz8z3LIIFU9uAnnbq6ioZZFek95gKHOoJlm6FDaPQuUY6OCEp0M48OQOiz2lgdSr_ACbMeYMxmYSqSk-RHIAS7wYecJNg3UQyXGwNmiwXOPAGJ3RZRlkHdyLFK6KGRbGYHz7TKfetDUAN5pQ_HhFIOad4XQUaTeZwoPTuLCPXWtuAu-m6jiv1t6RuhV6VlkzYD6vOvne1oG9DW0nFnmXbY1qupWv_RlNCurX-U1LLk9F--yCgFMzEXMT5ledeRB2GHjYAKPaTzCr1gDbKs005zHlptb7V7AnTW6S98anuXt2rE90n0MmnCj7C_U0Tc6qFke2d7NA-b1ltgo-glvUCRBrybmbCttLtRfwlHacJ4WLHxox0AdI05PBAsnD6sJ_6K9QjBCVmarJA76WFosv5KD06kSwq8HNdsy8cmMaJaiKP9UYvvLU_aNiLKH0-QwYqnUtiR9PU6wGAEpdUT66a0IZp7XECqrnahpEpCEtKjDXIc51gXwu9W2jHQ_A=w1920-h919?auditContext=prefetch"
+    },
+ {
+    title:"고민중독", 
+    subtitle:"[2024 PENTAPORT] 인천 펜타포트 락 페스티벌", 
+    url:"https://www.instagram.com/reel/C-Ksg-GN54j/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==",
+    thumb:"https://lh3.googleusercontent.com/rd-d/ALs6j_FuWt5Vl2zO3L8rIicEzPMg1m_L-0wERrKTY5D_APH8tIH8hY26jgC_VqOkKlWS_-hodq1O5D0xrZRCclm6MmxXgY1iRNuAfdMtuL7kd8XVLReHzQsB9yE93nWTKM9hr5Bo29o7VMjARhTbqsi3qJpd5_Lg4_MivFn6iVzZfaNxuzm00-ohyeo7XpqXGdLipdg9r1mzNuBTXBeVNyUK6BL2EkPe-MFtOs3NsgamkeVHPALFqDk7C0tvYn5_Sv9vq8Iiabu4pEovF8rbRwyrX9p3Edwxl-D4-HKMV3Jsh6TXLgbpWKHjccjn9Z-MaFp4BRNrxZzZQsuLyV-mLaleVdCuANJ3T-axIVkgAf0ZPOQAbJ6jgw25XyT36JCZheXHuQa0dfg0HJd6C8mERaI65kmn5_wVsJR1omwSXWk7Vud5U6XsMEe4PVf-S1oFB521Zn5oqbvBhveaMhtE4kxF235n51xA5XDyR2uyjxJWnADclegWX5CpgK94b1-pBA2mBDcPM8CYpe9RE_duYTM0GWJMwPlP9LQT9c2f8ETEatV3ZMzGpwCOgJGx3Mll6AXu4MgLyr2RegSiHZzIvgNAiTfac2qPJorEagkl6QojGcVRFoOAuR9eO_jebD8TncZKqGTxdGcYYEpUKyFWojIHZCyjxAVVwqFPPbHjTxKmHICrTz977YIwebuNnwzjZC_hibKARfba8wq9qaGw0YxorwA41pqZyR0EMtRAUK-hIhAVB1Zq9tyI7eQ9zAnZCoyeoJmFdzChaHuh3ToOBR5Tc1kOHp8eS2U7qtYfXhJVOgQVsf5sJfRzChAbB32hNsTZAtknsg-1xEasMyKWOAtsEZKV2kNCZzaWAr9s-JqPQ2HrT_VaWSvX4s3f74EQQpZt7m2VyF-R9mE-X_uOuaXnsIDVhTp7VUUpn6T7hQcCutsHpADvAogcQgrcKa2Rvo-saAa2MPFIqD-TXfbqX1AniwPxbo5R8ToDZLKEgX9qlqqDjOGua4BNjU7XbUEGrIrSGl2XY0QDq5svskM58qOzhFYGc-rOorsy4T88_0Vd-FdLy1ovAMMl6R96FOeZAV1hrlejcITgjVEmPw=w1920-h919?auditContext=prefetch"
+    },
+
+ ]
 },
+
+
+
+
+
 {
   name:"NewJeans",
   group:"international",
@@ -329,7 +464,7 @@ function openArtist(artist){
   searchBox.style.display="none";
 
   detail.style.display="block";
-if(artist.name === "아이유"){
+if(artist.name === "QWER"){
   detail.style.background = `linear-gradient(0deg, #F4C9C3, #AFDBE1)`
 }
 if(artist.name === "NewJeans"){
